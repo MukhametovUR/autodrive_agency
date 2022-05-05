@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-if="getBody.length == 0">
     <form @submit.prevent="postForm">
-      <h2 class="contetn__title">Заказать звонок</h2>
+      <h2 class="contetn__title my-4 py-3 mb-10">Заказать звонок</h2>
       <div class="contetn__inputs">
         <div class="contetn__item">
           <label for="name">Имя*</label>
@@ -12,7 +12,7 @@
             type="text"
             autocomplete="name"
             required=""
-            class="appearance-none rounded-none relative block w-full my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full ml-8 my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Имя"
           />
         </div>
@@ -21,12 +21,11 @@
           <input
             id="phone"
             v-model="userPhone"
-            data-mask="+7 (___) ___-__-__"
             name="phone"
             type="phone"
             autocomplete="phone"
             required=""
-            class="appearance-none rounded-none relative block w-full my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full ml-8 my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="+7 (___) ___-__-__"
           />
         </div>
@@ -38,7 +37,7 @@
             type="email"
             autocomplete="email"
             required=""
-            class="appearance-none rounded-none relative block w-full my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full ml-8 my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="some@some.some"
           />
         </div>
@@ -48,7 +47,7 @@
           <select
             id="city"
             v-model="id"
-            class="appearance-none rounded-none relative block w-full px-1 py-2 border border-gray-300 placeholder-white-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full my-2 ml-8 px-2 py-2 border border-gray-300 bg-white text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
           >
             <option v-for="city in cities" :key="city.id" :value="city.id">
               {{ city.name }}
@@ -56,13 +55,12 @@
           </select>
         </div>
       </div>
-
-      <MyButton @click="postForm" type="submit" class="m-4 bg-green-600"
+      <MyButton @click="postForm" type="submit" class="m-4 bg-green-600 btn"
         >Отправить</MyButton
       >
     </form>
-    <div v-html="getBody" />
   </div>
+  <div v-if="getBody.length != 0" v-html="getBody" />
 </template>
 <script>
 import axios from "axios";
@@ -91,12 +89,6 @@ export default {
 
   methods: {
     postForm() {
-      console.log(
-        "name: " + this.userName,
-        "phone: " + this.userPhone,
-        "email: " + this.userEmail,
-        "city_id: " + this.id
-      );
       if (
         this.userName.trim() &&
         this.userPhone.trim() &&
@@ -112,7 +104,6 @@ export default {
           })
           .then((response) => {
             this.getBody = response.data;
-            console.log(this.getBody);
           });
       }
       (this.userName = ""),
@@ -134,8 +125,12 @@ export default {
 }
 .contetn__inputs {
   display: flex;
+  justify-content: center;
 }
 .contetn__item {
   flex-direction: column;
+}
+.btn {
+  right: 0;
 }
 </style>

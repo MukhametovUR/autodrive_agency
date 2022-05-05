@@ -3,6 +3,7 @@
     <MyButton @click="showDialog" class="m-16 bg-indigo-600">Заказать в Москву</MyButton>
     <MyButton @click="showDialog" class="m-16 bg-teal-600">Заказать в Санкт-Петербург</MyButton>
     <MyDialog v-model:show="dialogVisible">
+          <a class="close" href="#" @click="closeDialog">&times;</a>
       <PostForm/>
     </MyDialog>
 
@@ -10,7 +11,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import MyButton from "@/components/MyButton.vue";
 import PostForm from "@/components/PostForm.vue";
 import MyDialog from "@/components/MyDialog.vue";
@@ -29,14 +29,28 @@ export default {
   data(){
     return{
       dialogVisible:false,
-      dialogVis:true
     }
   },
   methods: {
     showDialog(){
       this.dialogVisible=true;
+    },
+    closeDialog(){
+      this.dialogVisible=false;
     }
   }
 
 };
 </script>
+<style scoped>
+.close{
+   position: absolute;
+  top: 0;
+  right: 0;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+</style>
