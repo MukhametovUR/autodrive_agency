@@ -18,7 +18,7 @@
         </div>
         <div class="contetn__item">
           <label for="phone">Телефон*</label>
-          <input
+          <input 
             id="phone"
             v-model="userPhone"
             name="phone"
@@ -35,11 +35,11 @@
             id="email-address"
             v-model="userEmail"
             type="email"
-            autocomplete="email"
             required=""
             class="appearance-none rounded-none relative block w-full my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="some@some.some"
           />{{errorEmail}}
+
         </div>
         <div class="contetn__item">
           <label for="city">Город*</label>
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="sendBtn">
-        <MyButton @click="postForm" type="submit" class="m-4 bg-green-600 btn"
+        <MyButton @click="postForm" type="submit" class="m-4 bg-green-600 px-8 btn"
         >Отправить</MyButton
       >
       </div>
@@ -128,11 +128,11 @@ export default {
       //   (this.userEmail = ""),
       //   (this.id = "");
     },
-    validEmail: function(userEmail) {
+    validEmail(userEmail) {
       let ree = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return ree.test(userEmail)
   },  
-   validPhone: function(userPhone) {
+   validPhone(userPhone) {
       let rep = /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/;
       return rep.test(userPhone)
   },  
@@ -152,13 +152,26 @@ export default {
 .contetn__inputs {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
 }
 .contetn__item {
+  display: flex;
+  align-items: flex-start;
   flex-direction: column;
+  margin: 0 15px;
+  flex-grow: 1 ;
 }
 .sendBtn {
   display: flex;
   justify-content: flex-end;
+}
+@media  (max-width:480px) {
+  .btn{
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    align-items: center;
+
+  }
 }
 </style>
