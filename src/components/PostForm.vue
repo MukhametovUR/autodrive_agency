@@ -1,7 +1,7 @@
 <template>
   <div v-if="getBody.length == 0">
     <form @submit.prevent="postForm">
-      <h2 class="contetn__title my-4 py-3 mb-10">Заказать звонок</h2>
+      <h2 class="contetn__title my-2 mb-10">Заказать звонок</h2>
       <div class="contetn__inputs">
         <div class="contetn__item">
           <label for="name">Имя*</label>
@@ -12,9 +12,9 @@
             type="text"
             autocomplete="name"
             required=""
-            class="appearance-none rounded-none relative block w-full ml-8 my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Имя"
-          />
+          />{{errorName}}
         </div>
         <div class="contetn__item">
           <label for="phone">Телефон*</label>
@@ -25,9 +25,9 @@
             type="phone"
             autocomplete="phone"
             required=""
-            class="appearance-none rounded-none relative block w-full ml-8 my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="+7 (___) ___-__-__"
-          />
+          />{{errorPhone}}
         </div>
         <div class="contetn__item">
           <label for="email">Email*</label>
@@ -37,27 +37,28 @@
             type="email"
             autocomplete="email"
             required=""
-            class="appearance-none rounded-none relative block w-full ml-8 my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full my-2 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="some@some.some"
-          />
+          />{{errorEmail}}
         </div>
         <div class="contetn__item">
           <label for="city">Город*</label>
-
           <select
             id="city"
             v-model="id"
-            class="appearance-none rounded-none relative block w-full my-2 ml-8 px-2 py-2 border border-gray-300 bg-white text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full my-2 px-2 py-2 border border-gray-300 bg-white text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
           >
             <option v-for="city in cities" :key="city.id" :value="city.id">
               {{ city.name }}
             </option>
-          </select>
+          </select>{{errorCity}}
         </div>
       </div>
-      <MyButton @click="postForm" type="submit" class="m-4 bg-green-600 btn"
+      <div class="sendBtn">
+        <MyButton @click="postForm" type="submit" class="m-4 bg-green-600 btn"
         >Отправить</MyButton
       >
+      </div>
     </form>
   </div>
   <div v-if="getBody.length != 0" v-html="getBody" />
@@ -78,6 +79,10 @@ export default {
       userPhone: "",
       userEmail: "",
       getBody: "",
+      errorName:null,
+      errorPhone:null,
+      errorEmail:null,
+      errorCity:null,
       id: null,
       cities: [
         { id: 1, name: "Москва" },
@@ -89,6 +94,18 @@ export default {
 
   methods: {
     postForm() {
+       this.errorName =''
+       this.errorPhone =''
+       this.errorEmail=''
+      if(!this.userName){
+        this.errorName ='Обязательное поле'
+      }
+      if (!this.validEmail(this.userEmail)) {
+        this.errorEmail ='Обязательное поле'
+      }
+       if (!this.validPhone(this.userPhone)) {
+        this.errorPhone ='Обязательное поле'
+      }
       if (
         this.userName.trim() &&
         this.userPhone.trim() &&
@@ -106,12 +123,21 @@ export default {
             this.getBody = response.data;
           });
       }
-      (this.userName = ""),
-        (this.userPhone = ""),
-        (this.userEmail = ""),
-        (this.id = "");
+      // (this.userName = ""),
+      //   (this.userPhone = ""),
+      //   (this.userEmail = ""),
+      //   (this.id = "");
     },
-  },
+    validEmail: function(userEmail) {
+      let ree = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return ree.test(userEmail)
+  },  
+   validPhone: function(userPhone) {
+      let rep = /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/;
+      return rep.test(userPhone)
+  },  
+  
+  }
 };
 </script>
 <style scoped>
@@ -125,12 +151,14 @@ export default {
 }
 .contetn__inputs {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 }
 .contetn__item {
   flex-direction: column;
 }
-.btn {
-  right: 0;
+.sendBtn {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

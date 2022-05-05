@@ -44,8 +44,8 @@ export default {
 </script>
 <style scoped>
 .close{
-   position: absolute;
-  top: 0;
+  display: flex;
+  justify-content: flex-end;
   right: 0;
   transition: all 200ms;
   font-size: 30px;
